@@ -1,23 +1,41 @@
-pub mod physic_obj;
+pub mod actor;
 
 use macroquad::prelude::*;
 
 #[macroquad::main("tsq")]
 async fn main() {
 
-    let mut obj_1 = physic_obj::Actor {
-        actor_type: physic_obj::ActorType::Circle,
+    let mut actor_list: Vec<actor::Actor> = Vec::new();
+    let mut obj_1 = actor::Actor {
+        actor_type: actor::ActorType::Circle,
         x_pos: screen_height() / 2.0,
         y_pos: screen_height() / 2.0,
         width: 15.0,
         height: 15.0,
         radius: 15.0,
-        color: YELLOW
+        color: YELLOW,
+        player: true,
     };
+
+    let mut obj_2 = actor::Actor {
+        actor_type: actor::ActorType::Circle,
+        x_pos: screen_height() / 2.0 + 40.0,
+        y_pos: screen_height() / 2.0 + 40.0,
+        width: 15.0,
+        height: 15.0,
+        radius: 15.0,
+        color: RED,
+        player: false,
+    };
+
+    actor_list.push(obj_1);
+    actor_list.push(obj_2);
 
     loop {
         clear_background(LIGHTGRAY);
-        obj_1.run();
+        for actor in actor_list.iter_mut() {
+            actor.run();
+        }
         next_frame().await
     }
 }
