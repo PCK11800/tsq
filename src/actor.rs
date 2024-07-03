@@ -15,6 +15,7 @@ pub struct Actor {
     pub radius: f32,
     pub color: Color,
     pub player: bool,
+    pub logic: Box<dyn Fn(&mut f32, &mut f32) -> ()>
 }
 
 impl Actor {
@@ -30,24 +31,7 @@ impl Actor {
     }
 
     pub fn run(&mut self) {
-        if self.player {
-            // Player control logic
-            if is_key_down(KeyCode::Right) || is_key_down(KeyCode::D) {
-                self.x_pos += 1.0;
-            }
-            if is_key_down(KeyCode::Left) || is_key_down(KeyCode::A) {
-                self.x_pos -= 1.0;
-            }
-            if is_key_down(KeyCode::Down) || is_key_down(KeyCode::S) {
-                self.y_pos += 1.0;
-            }
-            if is_key_down(KeyCode::Up) || is_key_down(KeyCode::W) {
-                self.y_pos -= 1.0;
-            }
-        } else {
-            
-        }
-
+        (self.logic)(&mut self.x_pos, &mut self.y_pos);
         self.draw();
     }
 }

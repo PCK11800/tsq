@@ -15,6 +15,7 @@ async fn main() {
         radius: 15.0,
         color: YELLOW,
         player: true,
+        logic: Box::new(player_ai)
     };
 
     let mut obj_2 = actor::Actor {
@@ -26,6 +27,7 @@ async fn main() {
         radius: 15.0,
         color: RED,
         player: false,
+        logic: Box::new(|x_pos, y_pos| basic_ai(x_pos, y_pos)), 
     };
 
     actor_list.push(obj_1);
@@ -40,4 +42,23 @@ async fn main() {
     }
 }
 
+fn player_ai(x_pos: &mut f32, y_pos: &mut f32) {
+    if is_key_down(KeyCode::Right) || is_key_down(KeyCode::D) {
+        *x_pos += 1.0;
+    }
+    if is_key_down(KeyCode::Left) || is_key_down(KeyCode::A) {
+        *x_pos -= 1.0;
+    }
+    if is_key_down(KeyCode::Down) || is_key_down(KeyCode::S) {
+        *y_pos += 1.0;
+    }
+    if is_key_down(KeyCode::Up) || is_key_down(KeyCode::W) {
+        *y_pos -= 1.0;
+    }
+}
+
+fn basic_ai(x_pos: &mut f32, y_pos: &mut f32) {
+    // *x_pos += 1.0;
+    // *y_pos += 1.0;
+}
     
