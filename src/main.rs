@@ -6,30 +6,7 @@ use macroquad::prelude::*;
 async fn main() {
 
     let mut actor_list: Vec<actor::Actor> = Vec::new();
-    let mut obj_1 = actor::Actor {
-        actor_type: actor::ActorType::Rectangle,
-        x_pos: screen_height() / 2.0,
-        y_pos: screen_height() / 2.0,
-        width: 90.0,
-        height: 30.0,
-        rotation: 0.0,
-        color: YELLOW,
-        logic: Box::new(player_ai)
-    };
-
-    let mut obj_2 = actor::Actor {
-        actor_type: actor::ActorType::Rectangle,
-        x_pos: screen_height() / 2.0 + 40.0,
-        y_pos: screen_height() / 2.0 + 40.0,
-        width: 90.0,
-        height: 30.0,
-        rotation: 0.0,
-        color: RED,
-        logic: Box::new(basic_ai), 
-    };
-
-    actor_list.push(obj_1);
-    actor_list.push(obj_2);
+    actor_list.append(&mut init());
 
     loop {
         clear_background(LIGHTGRAY);
@@ -53,6 +30,36 @@ async fn main() {
     }
 }
 
+fn init() -> (Vec<actor::Actor>){
+    let mut actor_list: Vec<actor::Actor> = Vec::new();
+    let mut obj_1 = actor::Actor {
+        actor_type: actor::ActorType::Rectangle,
+        x_pos: screen_height() / 2.0,
+        y_pos: screen_height() / 2.0,
+        width: 60.0,
+        height: 30.0,
+        rotation: 0.0,
+        color: YELLOW,
+        logic: Box::new(player_ai)
+    };
+
+    let mut obj_2 = actor::Actor {
+        actor_type: actor::ActorType::Rectangle,
+        x_pos: screen_height() / 2.0 + 40.0,
+        y_pos: screen_height() / 2.0 + 40.0,
+        width: 60.0,
+        height: 30.0,
+        rotation: 0.0,
+        color: RED,
+        logic: Box::new(basic_ai), 
+    };
+
+    actor_list.push(obj_1);
+    actor_list.push(obj_2);
+
+    return actor_list;
+}
+
 fn resolve_collision(actor_1: &mut actor::Actor, actor_2: &mut actor::Actor) {
     if actor_1.actor_type == actor::ActorType::Rectangle && actor_2.actor_type == actor::ActorType::Rectangle {
         let left_1 = actor_1.x_pos;
@@ -69,8 +76,8 @@ fn resolve_collision(actor_1: &mut actor::Actor, actor_2: &mut actor::Actor) {
 
 fn player_ai(x_pos: &mut f32, y_pos: &mut f32, rotation: &mut f32) {
     // Define movement speed and rotation speed
-    let movement_speed = 4.0;
-    let rotation_speed = 0.0349; // approximately 2 degrees in radians
+    let movement_speed = 1.0;
+    let rotation_speed = 0.0349 / 2.0; // approximately 2 degrees in radians
 
     if is_key_down(KeyCode::Left) || is_key_down(KeyCode::A) {
         *rotation -= rotation_speed;
