@@ -12,26 +12,29 @@ pub struct Actor {
     pub y_pos: f32,
     pub width: f32,
     pub height: f32,
-    pub radius: f32,
+    pub rotation: f32,
     pub color: Color,
-    pub player: bool,
-    pub logic: Box<dyn Fn(&mut f32, &mut f32) -> ()>
+    pub logic: Box<dyn Fn(&mut f32, &mut f32, &mut f32) -> ()>
 }
 
 impl Actor {
     fn draw(&mut self) {
         match self.actor_type {
             ActorType::Rectangle => {
-                draw_rectangle(self.x_pos, self.y_pos, self.width, self.height, self.color)
+                draw_rectangle_ex(self.x_pos, self.y_pos, self.width, self.height, DrawRectangleParams {
+                    offset: Vec2::new(0.5, 0.5),
+                    rotation: self.rotation,
+                    color: self.color
+                })
             }
             ActorType::Circle => {
-                draw_circle(self.x_pos, self.y_pos, self.radius, self.color)
+                draw_circle(self.x_pos, self.y_pos, self.width, self.color)
             }
         }
     }
 
     pub fn run(&mut self) {
-        (self.logic)(&mut self.x_pos, &mut self.y_pos);
+        (self.logic)(&mut self.x_pos, &mut self.y_pos, &mut self.rotation);
         self.draw();
     }
 }
